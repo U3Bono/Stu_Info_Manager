@@ -84,7 +84,7 @@ void print_stu(Stu_Info stu)
     print_line("travel");
     print_stu_travel(stu);
     print_line("back");
-    print_stu_travel(stu);
+    print_stu_back(stu);
     print_line(NULL);
 }
 

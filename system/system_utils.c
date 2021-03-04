@@ -39,9 +39,9 @@ int search_info(FILE *fp, Stu_Info *search_stu, Search_Op op)
     {
         return -1;
     }
+
+    fseek(fp, sizeof(int), 0); //跳过总数到数据段
     Stu_Info read_stu;
-    init_stu(&read_stu);
-    rewind(fp);
     for (int i = 0; (fread(&read_stu, sizeof(Stu_Info), 1, fp)) == 1; i++)
     {
         switch (op)
@@ -91,5 +91,82 @@ int init_stu(Stu_Info *stu)
     strcat(stu->bacfo.medical_h, "");
     stu->bacfo.symptoms = 0;
     strcat(stu->bacfo.back_date, "");
+    return 1;
+}
+
+Stu_Info *get_list(char *fname, int *total)
+{
+    if (fname == NULL || total == NULL)
+    {
+        return NULL;
+    }
+    FILE *fp;
+    if ((fp = fopen(fname, "rb")) == NULL)
+    {
+        return NULL;
+    }
+    fread(total, sizeof(int), 1, fp);                       //读入总数
+    Stu_Info *stu_list = malloc(sizeof(Stu_Info) * *total); //分配内存
+    Stu_Info read_stu;
+    for (int i = 0; fread(&read_stu, sizeof(Stu_Info), 1, fp) == 1;)
+    {
+        if (read_stu.num > 0) //写入信息
+        {
+            *(stu_list + i) = read_stu;
+            i++;
+        }
+    }
+
+    return stu_list;
+}
+
+int save_list(char *fname, Stu_Info *stu_list, int length)
+{
+    if (fname == NULL || stu_list == NULL)
+    {
+        return 0;
+    }
+    FILE *fp;
+    if ((fp = fopen(fname, "w")) == NULL)
+    {
+        return 0;
+    }
+
+    fprintf(fp, "number\t");
+    fprintf(fp, "name\t");
+    fprintf(fp, "id\t");
+    fprintf(fp, "student type\t");
+    fprintf(fp, "college\t\t");
+    fprintf(fp, "major\t");
+    fprintf(fp, "road\t\t");
+    fprintf(fp, "contact\t\t");
+    fprintf(fp, "temperature\t");
+    fprintf(fp, "medical history\t\t");
+    fprintf(fp, "symptoms\t");
+    fprintf(fp, "back date\n");
+
+    Stu_Info stu;
+    char stype[10] = "";
+    char ctype[20] = "";
+    for (int i = 0; i < length; i++)
+    {
+        stu = *(stu_list + i);
+        fprintf(fp, "%d\t", stu.num);
+        fprintf(fp, "%s\t", stu.name);
+        fprintf(fp, "%lld\t", stu.id);
+        get_stype(stype, stu.stype);
+        fprintf(fp, "%s\t\t", stype);
+        get_college(ctype, stu.ctype);
+        fprintf(fp, "%s\t", ctype);
+        fprintf(fp, "%s\t", stu.major);
+        fprintf(fp, "%s\t", stu.trafo.road);
+        fprintf(fp, "%s\t\t", stu.trafo.contact);
+        fprintf(fp, "%.1f\t\t", stu.bacfo.temperature);
+        fprintf(fp, "%s\t\t\t", stu.bacfo.medical_h);
+        fprintf(fp, "%d\t\t", stu.bacfo.symptoms);
+        fprintf(fp, "%s\n", stu.bacfo.back_date);
+    }
+
+    fclose(fp);
     return 1;
 }

@@ -14,5 +14,6 @@ void add_stu();
 void delect_stu();
 void modify_stu();
 void print_list();
+void save_info();
 
 #endif

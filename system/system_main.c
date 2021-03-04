@@ -2,8 +2,8 @@
 
 void system_main()
 {
-    char *options[] = {"exit", "search", "add", "delect", "modify", "print"};
-    int power = (user.type == 0) ? 6 : 2;
+    char *options[] = {"exit", "search", "add", "delect", "modify", "print", "save"};
+    int power = (user.type == 0) ? 7 : 2;
 L1:
     system("clear");
     print_star("User Info");
@@ -35,6 +35,9 @@ L1:
         break;
     case 5:
         print_list();
+        break;
+    case 6:
+        save_info();
         break;
     default:
         break;
@@ -119,7 +122,30 @@ void add_stu()
     {
         if (search_info(fp, &student, NUMBER) == -1)
         {
-            fwrite(&student, sizeof(Stu_Info), 1, fp);
+            int total = 0;
+            int c = fgetc(fp);
+            if (c == EOF) //第一次写入
+            {
+                total++;
+                fwrite(&total, sizeof(int), 1, fp);        //写入总数
+                fwrite(&student, sizeof(Stu_Info), 1, fp); //写入数据
+            }
+            else
+            {
+                fwrite(&student, sizeof(Stu_Info), 1, fp); //添加数据
+                fclose(fp);
+                if ((fp = fopen(fname, "rb+")) == NULL) //修改总数
+                {
+                    fread(&total, sizeof(int), 1, fp); //读入总数
+                    total++;
+                    rewind(fp);
+                    fwrite(&total, sizeof(int), 1, fp); //写入总数
+                }
+                else
+                {
+                    printf("File error!\n");
+                }
+            }
             printf("Add success!\n");
         }
         else
@@ -157,8 +183,13 @@ void delect_stu()
     }
     else
     {
+        int total = 0;
+        fread(&total, sizeof(int), 1, fp);
+        total--;
         int flag = -student.num;
-        fseek(fp, sizeof(Stu_Info) * position, 0);
+        rewind(fp);
+        fwrite(&total, sizeof(int), 1, fp);
+        fseek(fp, sizeof(Stu_Info) * position + sizeof(int), 0);
         fwrite(&flag, sizeof(int), 1, fp);
         printf("Delect success!\n");
     }
@@ -280,6 +311,7 @@ void print_list()
         return;
     }
 
+    fseek(fp, sizeof(int), 0); //跳过总数到数据段
     while ((fread(&stu, sizeof(Stu_Info), 1, fp)) == 1)
     {
         if (stu.num > 0)
@@ -290,4 +322,24 @@ void print_list()
     }
 
     fclose(fp);
+}
+
+void save_info()
+{
+    Col_Type ctype;
+    printf("college:");
+    scanf("%d", &ctype);
+    char fname[30] = "info_";
+    get_college(fname, ctype);
+    int total = 0;
+    Stu_Info *stu_list = get_list(fname, &total);
+    if (stu_list == NULL)
+    {
+        printf("Read error!\n");
+        return;
+    }
+    strcat(fname, ".txt");
+    save_list(fname, stu_list, total);
+    free(stu_list);
+    printf("Save success!\n");
 }
