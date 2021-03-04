@@ -132,39 +132,39 @@ int save_list(char *fname, Stu_Info *stu_list, int length)
         return 0;
     }
 
-    fprintf(fp, "number\t");
-    fprintf(fp, "name\t");
-    fprintf(fp, "id\t");
-    fprintf(fp, "student type\t");
-    fprintf(fp, "college\t\t");
-    fprintf(fp, "major\t");
-    fprintf(fp, "road\t\t");
-    fprintf(fp, "contact\t\t");
-    fprintf(fp, "temperature\t");
-    fprintf(fp, "medical history\t\t");
-    fprintf(fp, "symptoms\t");
-    fprintf(fp, "back date\n");
+    fprintf(fp, "%6s", "number");
+    fprintf(fp, "%16s", "name");
+    fprintf(fp, "%6s", "id");
+    fprintf(fp, "%16s", "student type");
+    fprintf(fp, "%20s", "college");
+    fprintf(fp, "%10s", "major");
+    fprintf(fp, "%20s", "road");
+    fprintf(fp, "%20s", "contact");
+    fprintf(fp, "%16s", "temperature");
+    fprintf(fp, "%26s", "medical history");
+    fprintf(fp, "%20s", "symptoms");
+    fprintf(fp, "%20s", "back date\n");
 
     Stu_Info stu;
-    char stype[10] = "";
-    char ctype[20] = "";
     for (int i = 0; i < length; i++)
     {
         stu = *(stu_list + i);
-        fprintf(fp, "%d\t", stu.num);
-        fprintf(fp, "%s\t", stu.name);
-        fprintf(fp, "%lld\t", stu.id);
+        fprintf(fp, "%6d", stu.num);
+        fprintf(fp, "%16s", stu.name);
+        fprintf(fp, "%6lld", stu.id);
+        char stype[10] = "";
         get_stype(stype, stu.stype);
-        fprintf(fp, "%s\t\t", stype);
+        fprintf(fp, "%16s", stype);
+        char ctype[20] = "";
         get_college(ctype, stu.ctype);
-        fprintf(fp, "%s\t", ctype);
-        fprintf(fp, "%s\t", stu.major);
-        fprintf(fp, "%s\t", stu.trafo.road);
-        fprintf(fp, "%s\t\t", stu.trafo.contact);
-        fprintf(fp, "%.1f\t\t", stu.bacfo.temperature);
-        fprintf(fp, "%s\t\t\t", stu.bacfo.medical_h);
-        fprintf(fp, "%d\t\t", stu.bacfo.symptoms);
-        fprintf(fp, "%s\n", stu.bacfo.back_date);
+        fprintf(fp, "%20s", ctype);
+        fprintf(fp, "%10s", stu.major);
+        fprintf(fp, "%20s", stu.trafo.road);
+        fprintf(fp, "%20s", stu.trafo.contact);
+        fprintf(fp, "%16.1f", stu.bacfo.temperature);
+        fprintf(fp, "%26s", stu.bacfo.medical_h);
+        fprintf(fp, "%20d", stu.bacfo.symptoms);
+        fprintf(fp, "%19s\n", stu.bacfo.back_date);
     }
 
     fclose(fp);
