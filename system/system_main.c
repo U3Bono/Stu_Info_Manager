@@ -123,27 +123,30 @@ void add_stu()
         if (search_info(fp, &student, NUMBER) == -1)
         {
             int total = 0;
+            rewind(fp);
             int c = fgetc(fp);
             if (c == EOF) //第一次写入
             {
+                printf("1\n");
                 total++;
                 fwrite(&total, sizeof(int), 1, fp);        //写入总数
                 fwrite(&student, sizeof(Stu_Info), 1, fp); //写入数据
             }
             else
             {
+                printf("2\n");
                 fwrite(&student, sizeof(Stu_Info), 1, fp); //添加数据
                 fclose(fp);
                 if ((fp = fopen(fname, "rb+")) == NULL) //修改总数
+                {
+                    printf("File error!\n");
+                }
+                else
                 {
                     fread(&total, sizeof(int), 1, fp); //读入总数
                     total++;
                     rewind(fp);
                     fwrite(&total, sizeof(int), 1, fp); //写入总数
-                }
-                else
-                {
-                    printf("File error!\n");
                 }
             }
             printf("Add success!\n");
