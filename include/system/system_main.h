@@ -4,14 +4,15 @@
 #include "../information/stu_info.h"
 #include "../login/login_main.h"
 #include "../tools/printop.h"
-#include <string.h>
+#include "system_utils.h"
 
 void system_main();
 
-static void exit_login();
-static void search_stu();
-static void add_stu();
-static void delect_stu();
-static void modify_stu();
+void exit_login();
+void search_stu();
+void add_stu();
+void delect_stu();
+void modify_stu();
+void print_list();
 
 #endif

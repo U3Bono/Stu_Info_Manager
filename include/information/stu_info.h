@@ -1,6 +1,8 @@
 #ifndef _stu_info_h
 #define _stu_info_h
 
+#include <string.h>
+
 typedef struct
 {
     char road[200];    //路途（格式xx-xx-xx）
@@ -9,7 +11,7 @@ typedef struct
 
 typedef struct
 {
-    unsigned int temperature; //体温
+    float temperature; //体温
     char medical_h[200];      //病史
     int symptoms;             //是否有相关症状
     char back_date[9];        //返校时间（格式xxxx-xx-xx）
@@ -40,14 +42,17 @@ typedef enum
 
 typedef struct
 {
-    int num;           //学号(负数代表删除)
-    char name[40];     //姓名
-    unsigned int id;   //身份证id
-    Stu_Type stype;    //学生类型
-    Col_Type ctype;    //学院
-    char major[40];    //专业
-    Travel_Info trafo; //旅行史
-    Back_Info bacfo;   //返校信息
+    int num;               //学号(<0代表删除)
+    char name[40];         //姓名
+    unsigned long long id; //身份证id(主键)
+    Stu_Type stype;        //学生类型
+    Col_Type ctype;        //学院
+    char major[40];        //专业
+    Travel_Info trafo;     //旅行史
+    Back_Info bacfo;       //返校信息
 } Stu_Info;
+
+int get_college(char *college, Col_Type ctype);
+int get_stype(char *student, Stu_Type stype);
 
 #endif

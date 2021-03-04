@@ -68,7 +68,9 @@
         "login_main.h": "c",
         "string.h": "c",
         "system_main.h": "c",
-        "printop.h": "c"
+        "printop.h": "c",
+        "system_utils.h": "c",
+        "stdio.h": "c"
     },
     "C_Cpp.errorSquiggles": "Disabled"
 }

@@ -2,8 +2,8 @@
 
 void system_main()
 {
-    char *options[] = {"exit", "search", "add", "delect", "modify"};
-    int power = (user.type == 0) ? 5 : 2;
+    char *options[] = {"exit", "search", "add", "delect", "modify", "print"};
+    int power = (user.type == 0) ? 6 : 2;
 L1:
     system("clear");
     print_star("User Info");
@@ -33,99 +33,261 @@ L1:
     case 4:
         modify_stu();
         break;
+    case 5:
+        print_list();
+        break;
     default:
         break;
     }
+    print_pause("Please input any key to continum...");
     goto L1;
 }
 
-static void exit_login()
+void exit_login()
 {
     login_main();
 }
 
-static void search_stu()
+void search_stu()
 {
     system("clear");
     print_star(" Search ");
-    char *options[] = {"back", "name", "number", "id"};
-    for (int i = 0; i < 3; i++)
+    char *options[] = {"number", "name", "id", "back"};
+    for (int i = 0; i < 4; i++)
     {
         printf("%d.%s\n", i, *(options + i));
     }
 
-    print_star(" Select ");
-    int op;
+    print_star(NULL);
+    printf("select:");
+    Stu_Info search_stu; //学生信息
+    init_stu(&search_stu);
+    Search_Op op; //查询操作
     scanf("%d", &op);
     switch (op)
     {
-    case 0:
+    case NUMBER:
+        printf("number:");
+        scanf("%d", &search_stu.num);
         break;
-    case 1:
-
+    case NAME:
+        printf("name:");
+        scanf("%s", search_stu.name);
         break;
-    case 2:
-
-        break;
-    case 3:
-
+    case ID:
+        printf("id:");
+        scanf("%lld", &search_stu.id);
         break;
     default:
-        break;
+        return;
     }
+    printf("college(0-11):"); //院校
+    scanf("%d", &search_stu.ctype);
+
+    FILE *fp;
+    char fname[30] = "info_";
+    get_college(fname, search_stu.ctype);
+    if ((fp = fopen(fname, "rb")) == NULL)
+    {
+        print_pause("No student.(1)");
+        return;
+    }
+    if (search_info(fp, &search_stu, op) == -1)
+    {
+        printf("No student.(2)\n");
+    }
+    else
+    {
+        print_stu(search_stu);
+    }
+    fclose(fp);
 }
 
-static void add_stu()
+void add_stu()
 {
-    printf("student information:\n");
-
     Stu_Info student;
-    printf("number:");
-    scanf("%d", &student.num);
-    printf("\nname:");
-    scanf("%s", student.name);
-    printf("\nID card:");
-    scanf("%d", &student.id);
-    while (1)
+    input_info(&student);
+
+    FILE *fp;
+    char fname[30] = "info_";
+    get_college(fname, student.ctype);
+    if ((fp = fopen(fname, "ab+")) == NULL)
     {
-        printf("\nstudent type(0-2):");
-        scanf("%d", &student.stype);
-        if (student.stype > -1 && student.stype < 3)
+        return;
+    }
+    if (search_info(fp, &student, ID) == -1)
+    {
+        if (search_info(fp, &student, NUMBER) == -1)
         {
-            break;
+            fwrite(&student, sizeof(Stu_Info), 1, fp);
+            printf("Add success!\n");
+        }
+        else
+        {
+            printf("Number error!\n");
         }
     }
-    while (1)
+    else
     {
-        printf("\ncollege(0-11):");
-        scanf("%d", &student.ctype);
-        if (student.ctype > -1 && student.ctype < 12)
+        printf("Existed!\n");
+    }
+    fclose(fp);
+}
+
+void delect_stu()
+{
+    Stu_Info student;
+    init_stu(&student);
+    printf("id:");
+    scanf("%lld", &student.id);
+    printf("college(0-11):"); //院校
+    scanf("%d", &student.ctype);
+
+    FILE *fp;
+    char fname[30] = "info_";
+    get_college(fname, student.ctype);
+    if ((fp = fopen(fname, "rb+")) == NULL)
+    {
+        return;
+    }
+    int position = search_info(fp, &student, ID);
+    if (position == -1)
+    {
+        printf("No student.(3)\n");
+    }
+    else
+    {
+        int flag = -student.num;
+        fseek(fp, sizeof(Stu_Info) * position, 0);
+        fwrite(&flag, sizeof(int), 1, fp);
+        printf("Delect success!\n");
+    }
+    fclose(fp);
+}
+
+void modify_stu()
+{
+    Stu_Info student;
+    init_stu(&student);
+    printf("id:");
+    scanf("%lld", &student.id);
+    printf("college(0-11):"); //院校
+    scanf("%d", &student.ctype);
+
+    FILE *fp;
+    char fname[30] = "info_";
+    get_college(fname, student.ctype);
+    if ((fp = fopen(fname, "rb+")) == NULL)
+    {
+        return;
+    }
+    int position = search_info(fp, &student, ID);
+    if (position == -1)
+    {
+        printf("No student.(4)\n");
+    }
+    else
+    {
+        print_stu(student);
+        char *options[] = {"number", "name", "id", "type", "major",
+                           "road", "contact", "temperature", "medical histroy", "has symptoms?", "back date"};
+        print_star(" Options ");
+        for (int i = 0; i < 11; i++)
         {
+            printf("%d.%s\n", i, *(options + i));
+        }
+        print_star("Select");
+        int op;
+        scanf("%d", &op);
+        if (op == 10)
+        {
+            printf("%s:", *(options + op));
+        }
+        else
+        {
+            printf("new %s:", *(options + op));
+        }
+
+        switch (op)
+        {
+        case 0:
+            scanf("%d", &(student.num));
+            if (search_info(fp, &student, NUMBER) == -1)
+            {
+                printf("Existed!\n");
+                return;
+            }
+            break;
+        case 1:
+            scanf("%s", student.name);
+            break;
+        case 2:
+            scanf("%lld", &(student.id));
+            if (search_info(fp, &student, ID) == -1)
+            {
+                printf("Existed!\n");
+                return;
+            }
+            break;
+        case 3:
+            scanf("%d", &(student.stype));
+            break;
+        case 4:
+            scanf("%s", student.major);
+            break;
+        case 5:
+            scanf("%s", student.trafo.road);
+            break;
+        case 6:
+            scanf("%s", student.trafo.contact);
+            break;
+        case 7:
+            scanf("%f", &(student.bacfo.temperature));
+            break;
+        case 8:
+            scanf("%s", student.bacfo.medical_h);
+            break;
+        case 9:
+            scanf("%d", &(student.bacfo.symptoms));
+            break;
+        case 10:
+            scanf("%s", student.bacfo.back_date);
+            break;
+        default:
             break;
         }
+
+        fseek(fp, sizeof(Stu_Info) * position, 0);
+        fwrite(&student, sizeof(Stu_Info), 1, fp);
+        printf("Modify success!\n");
     }
-    printf("\nmajor:");
-    scanf("%s", student.major);
-
-    printf("\nroad(xx-xx-xx):");
-    printf("%s", student.trafo.road);
-    printf("\ncontact(xx,xx,xx):");
-    printf("%s", student.trafo.contact);
-
-    printf("\ntemperature:");
-    printf("%d", student.bacfo.temperature);
-    printf("\nmedical history:");
-    printf("%s", student.bacfo.medical_h);
-    printf("\nhas symptoms(0,1)?");
-    printf("%d", student.bacfo.symptoms);
-    printf("\nback date(xxxx-xx-xx):");
-    printf("%s", student.bacfo.back_date);
+    fclose(fp);
 }
 
-static void delect_stu()
+void print_list()
 {
-}
+    Stu_Info stu;
+    printf("college(0-11):"); //院校
+    scanf("%d", &stu.ctype);
 
-static void modify_stu()
-{
+    FILE *fp;
+    char fname[30] = "info_";
+    get_college(fname, stu.ctype);
+    print_star("basic");
+    if ((fp = fopen(fname, "rb")) == NULL)
+    {
+        print_pause("No student.(4)");
+        return;
+    }
+
+    while ((fread(&stu, sizeof(Stu_Info), 1, fp)) == 1)
+    {
+        if (stu.num > 0)
+        {
+            print_stu_basic(stu);
+            print_line(NULL);
+        }
+    }
+
+    fclose(fp);
 }
