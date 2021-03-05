@@ -17,8 +17,8 @@ typedef enum
 
 typedef struct
 {
-    Stu_Info *stu_list; //学生信息顺序表
-    int length;         //顺序表长
+    Stu_Info **stu_map; //学生信息映射表（*:学生信息地址，**:学生信息）
+    int length;         //映射表长
     Col_Type col_type;  //学院
 } Buf_Stu;
 

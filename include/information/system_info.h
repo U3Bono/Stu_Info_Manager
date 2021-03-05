@@ -2,7 +2,7 @@
 #define _system_info_h
 
 #define SYS_NAME "Student Information Manager"
-#define SYS_VERSION "0.20"
+#define SYS_VERSION "1.00"
 #define SYS_AUTHOR "U3_Bono"
 
 #endif

@@ -42,7 +42,7 @@ typedef enum
 
 typedef struct
 {
-    int num;               //学号(<0代表删除)
+    int num;               //学号
     char name[40];         //姓名
     unsigned long long id; //身份证id(主键)
     Stu_Type stype;        //学生类型

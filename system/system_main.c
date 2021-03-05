@@ -107,37 +107,40 @@ void add_stu(Buf_Stu *buff)
     Stu_Info student;
     input_info(&student);
 
-    if (buff->col_type != student.ctype)
+    if (buff->col_type != student.ctype) //不同院校
     {
         switch_buff(buff, student.ctype);
     }
 
     int free_buf = -1; //空闲缓存位置
-    Stu_Info search_stu;
+    Stu_Info *sp;
     for (int i = 0; i < buff->length; i++)
     {
-        search_stu = *(buff->stu_list + i);
-        if (search_stu.num > 0)
+        sp = *(buff->stu_map + i);
+        if (sp == NULL)
         {
-            if (search_stu.num == student.num || search_stu.id == student.id)
+            free_buf = i;
+        }
+        else
+        {
+            if (sp->num == student.num || sp->id == student.id)
             {
                 printf("Existed!\n");
                 return;
             }
-        }
-        else
-        {
-            free_buf = i;
         }
     }
 
     if (free_buf == -1) //没有空闲
     {
         free_buf = buff->length;
-        enlarge_buf(buff, 10); //扩充缓存
+        enlarge_buf(buff, 10); //扩充映射表
     }
 
-    *(buff->stu_list + free_buf) = student; //写入新增数据到缓存
+    sp = malloc(sizeof(Stu_Info)); //分配内存
+    *(sp) = student;
+    *(buff->stu_map + free_buf) = sp; //写入映射表
+
     printf("Add success!\n");
 }
 
@@ -161,7 +164,8 @@ void delect_stu(Buf_Stu *buff)
         return;
     }
 
-    (buff->stu_list + position)->num *= -1;
+    free(*(buff->stu_map + position));
+    *(buff->stu_map + position) = NULL;
     printf("Delect success!\n");
 }
 
@@ -247,19 +251,19 @@ void modify_stu(Buf_Stu *buff)
         break;
     }
 
-    *(buff->stu_list + position) = student;
+    **(buff->stu_map + position) = student;
     printf("Modify success!\n");
 }
 
 void print_list(Buf_Stu *buff)
 {
-    Stu_Info stu;
+    Stu_Info *sp;
     for (int i = 0; i < buff->length; i++)
     {
-        stu = *(buff->stu_list + i);
-        if (stu.num > 0)
+        sp = *(buff->stu_map + i);
+        if (sp != NULL)
         {
-            print_stu_basic(stu);
+            print_stu_basic(*sp);
             print_line(NULL);
         }
     }

@@ -1,0 +1,3 @@
+v0.10	I/O based on file.
+v0.20	Add sequence buffer.
+V1.00	I/O based on map buffer.
