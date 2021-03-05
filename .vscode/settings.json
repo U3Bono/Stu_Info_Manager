@@ -70,7 +70,8 @@
         "system_main.h": "c",
         "printop.h": "c",
         "system_utils.h": "c",
-        "stdio.h": "c"
+        "stdio.h": "c",
+        "system_buf.h": "c"
     },
     "C_Cpp.errorSquiggles": "Disabled"
 }

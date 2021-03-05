@@ -110,7 +110,7 @@ void print_stu_travel(Stu_Info stu)
 
 void print_stu_back(Stu_Info stu)
 {
-    printf("temperature:%f\n", stu.bacfo.temperature);
+    printf("temperature:%.1f\n", stu.bacfo.temperature);
     printf("medical histroy:%s\n", stu.bacfo.medical_h);
     printf("has symptoms?");
     bool_printf(stu.bacfo.symptoms);

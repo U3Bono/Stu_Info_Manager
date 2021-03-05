@@ -6,8 +6,8 @@ void system_main()
     init_buf(&buff);
     get_list(&buff);
 
-    char *options[] = {"exit", "search", "add", "delect", "modify", "print", "save"};
-    int power = (user.type == 0) ? 7 : 2;
+    char *options[] = {"exit", "search", "add", "delect", "modify", "clear", "print", "save"};
+    int power = (user.type == 0) ? 8 : 2;
 L1:
     system("clear");
     print_star("User Info");
@@ -38,9 +38,12 @@ L1:
         modify_stu(&buff);
         break;
     case 5:
-        print_list(&buff);
+        clear_list(&buff);
         break;
     case 6:
+        print_list(&buff);
+        break;
+    case 7:
         save_info(&buff);
         break;
     default:
@@ -52,6 +55,10 @@ L1:
 
 void exit_login(Buf_Stu *buff)
 {
+    if (buff == NULL)
+    {
+        return;
+    }
     set_list(buff);    //回写磁盘
     destroy_buf(buff); //清理缓存
     login_main();      //退出登陆
@@ -59,6 +66,10 @@ void exit_login(Buf_Stu *buff)
 
 void search_stu(Buf_Stu *buff)
 {
+    if (buff == NULL)
+    {
+        return;
+    }
     system("clear");
     print_star(" Search ");
     char *options[] = {"number", "name", "id", "back"};
@@ -104,6 +115,10 @@ void search_stu(Buf_Stu *buff)
 
 void add_stu(Buf_Stu *buff)
 {
+    if (buff == NULL)
+    {
+        return;
+    }
     Stu_Info student;
     input_info(&student);
 
@@ -146,6 +161,10 @@ void add_stu(Buf_Stu *buff)
 
 void delect_stu(Buf_Stu *buff)
 {
+    if (buff == NULL)
+    {
+        return;
+    }
     Stu_Info student;
     printf("id:"); //id
     scanf("%lld", &student.id);
@@ -171,6 +190,10 @@ void delect_stu(Buf_Stu *buff)
 
 void modify_stu(Buf_Stu *buff)
 {
+    if (buff == NULL)
+    {
+        return;
+    }
     Stu_Info student;
     init_stu(&student);
     printf("id:"); //id
@@ -255,8 +278,29 @@ void modify_stu(Buf_Stu *buff)
     printf("Modify success!\n");
 }
 
+void clear_list(Buf_Stu *buff)
+{
+    if (buff == NULL)
+    {
+        return;
+    }
+    if (renew_info(buff))
+    {
+        printf("Clear success!\n");
+    }
+    else
+    {
+        printf("Failed!\n");
+    }
+}
+
 void print_list(Buf_Stu *buff)
 {
+    if (buff == NULL)
+    {
+        return;
+    }
+    print_star("Information");
     Stu_Info *sp;
     for (int i = 0; i < buff->length; i++)
     {
@@ -271,6 +315,10 @@ void print_list(Buf_Stu *buff)
 
 void save_info(Buf_Stu *buff)
 {
+    if (buff == NULL)
+    {
+        return;
+    }
     char fname[30];
     printf("File name:");
     scanf("%s", fname);

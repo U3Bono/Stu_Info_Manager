@@ -13,6 +13,7 @@ void search_stu(Buf_Stu *buff);
 void add_stu(Buf_Stu *buff);
 void delect_stu(Buf_Stu *buff);
 void modify_stu(Buf_Stu *buff);
+void clear_list(Buf_Stu *buff);
 void print_list(Buf_Stu *buff);
 void save_info(Buf_Stu *buff);
 
