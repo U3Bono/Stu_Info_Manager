@@ -8,12 +8,12 @@
 
 void system_main();
 
-void exit_login();
-void search_stu();
-void add_stu();
-void delect_stu();
-void modify_stu();
-void print_list();
-void save_info();
+void exit_login(Buf_Stu *buff);
+void search_stu(Buf_Stu *buff);
+void add_stu(Buf_Stu *buff);
+void delect_stu(Buf_Stu *buff);
+void modify_stu(Buf_Stu *buff);
+void print_list(Buf_Stu *buff);
+void save_info(Buf_Stu *buff);
 
 #endif
