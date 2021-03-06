@@ -133,17 +133,18 @@ int renew_info(Buf_Stu *buff)
             }
         }
 
-        for (int j = i - 1; j > -1; j--) //缓存排序
+        if ((sp->num < (*(buff->stu_map + i - 1))->num)) //插入排序
         {
-            if ((sp->num >= (*(buff->stu_map + j))->num))
+            *(buff->stu_map + i) = *(buff->stu_map + i - 1);
+            for (int j = i - 1; j > 0; j--)
             {
-                if (j + 1 != i)
+                if ((sp->num >= (*(buff->stu_map + j - 1))->num)) //大于等于上一个数
                 {
-                    *(buff->stu_map + j + 1) = sp;
+                    *(buff->stu_map + j) = sp;
+                    break;
                 }
-                break;
+                *(buff->stu_map + j) = *(buff->stu_map + j - 1); //上一个数后移
             }
-            *(buff->stu_map + j + 1) = *(buff->stu_map + j); //后移
         }
     }
     return 1;
