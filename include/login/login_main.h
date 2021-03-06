@@ -3,7 +3,6 @@
 
 #include "../information/user_info.h"
 #include "../tools/printop.h"
-
 #include "../system/system_main.h"
 
 #include <string.h>

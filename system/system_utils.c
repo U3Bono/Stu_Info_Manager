@@ -114,7 +114,7 @@ int renew_info(Buf_Stu *buff)
     for (int i = 0; i < last + 1; i++)
     {
         sp = *(buff->stu_map + i);
-        if (sp == NULL) //无数据
+        if (sp == NULL) //清理空闲缓存
         {
             while (i < last)
             {
@@ -127,21 +127,23 @@ int renew_info(Buf_Stu *buff)
                 }
                 last--;
             }
-        }
-        if (sp != NULL)
-        {
-            for (int j = i - 1; j > -1; j--)
+            if (sp == NULL) //之后的缓存都为空，整理完成
             {
-                if ((sp->num >= (*(buff->stu_map + j))->num))
-                {
-                    if (j + 1 != i)
-                    {
-                        *(buff->stu_map + j + 1) = sp;
-                    }
-                    break;
-                }
-                *(buff->stu_map + j + 1) = *(buff->stu_map + j); //后移
+                break;
             }
+        }
+
+        for (int j = i - 1; j > -1; j--) //缓存排序
+        {
+            if ((sp->num >= (*(buff->stu_map + j))->num))
+            {
+                if (j + 1 != i)
+                {
+                    *(buff->stu_map + j + 1) = sp;
+                }
+                break;
+            }
+            *(buff->stu_map + j + 1) = *(buff->stu_map + j); //后移
         }
     }
     return 1;
