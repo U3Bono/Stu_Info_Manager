@@ -2,11 +2,10 @@
 #define _system_buf_h
 
 #include "../information/stu_info.h"
-#include "../tools/printop.h"
 
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <stdio.h>
 
 typedef struct
 {

@@ -2,7 +2,6 @@
 
 int main(int argc, const char *argv[])
 {
-
     printf_info();
     login_main();
 

@@ -2,6 +2,7 @@
 #define _system_utils_h
 
 #include "system_buf.h"
+#include "../tools/printop.h"
 
 typedef enum
 {

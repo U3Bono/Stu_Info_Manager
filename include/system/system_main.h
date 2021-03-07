@@ -1,10 +1,8 @@
 #ifndef _system_main_h
 #define _system_main_h
 
-#include "../information/stu_info.h"
-#include "../login/login_main.h"
-#include "../tools/printop.h"
 #include "system_utils.h"
+#include "../login/login_main.h"
 
 void system_main();
 
