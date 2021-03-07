@@ -53,6 +53,67 @@ void input_info(Stu_Info *student)
     scanf("%s", student->bacfo.back_date);
 }
 
+int modify_info(Stu_Info *new_stu)
+{
+    if (new_stu == NULL)
+    {
+        return 0;
+    }
+
+    char *options[] = {"name", "type", "major",
+                       "road", "contact", "temperature", "medical histroy", "has symptoms?", "back date"};
+    print_star(" Options ");
+    for (int i = 0; i < 9; i++) //打印选项
+    {
+        printf("%d.%s\n", i, *(options + i));
+    }
+    print_star("Select");
+    int op;
+    scanf("%d", &op);
+    if (op == 9)
+    {
+        printf("%s:", *(options + op));
+    }
+    else
+    {
+        printf("new %s:", *(options + op));
+    }
+
+    switch (op)
+    {
+    case 0:
+        scanf("%s", new_stu->name);
+        break;
+    case 1:
+        scanf("%d", &(new_stu->stype));
+        break;
+    case 2:
+        scanf("%s", new_stu->major);
+        break;
+    case 3:
+        scanf("%s", new_stu->trafo.road);
+        break;
+    case 4:
+        scanf("%s", new_stu->trafo.contact);
+        break;
+    case 5:
+        scanf("%f", &(new_stu->bacfo.temperature));
+        break;
+    case 6:
+        scanf("%s", new_stu->bacfo.medical_h);
+        break;
+    case 7:
+        scanf("%d", &(new_stu->bacfo.symptoms));
+        break;
+    case 8:
+        scanf("%s", new_stu->bacfo.back_date);
+        break;
+    default:
+        break;
+    }
+    return 1;
+}
+
 int search_info(Buf_Stu *buff, Stu_Info *search_stu, Search_Op op)
 {
     if (buff == NULL || search_stu == NULL)
@@ -99,53 +160,42 @@ int search_info(Buf_Stu *buff, Stu_Info *search_stu, Search_Op op)
     return -1;
 }
 
-int clean_buff(Buf_Stu *buff)
+void print_stu(Stu_Info stu)
 {
-    if (buff == NULL | buff->stu_map == NULL)
-    {
-        return 0;
-    }
+    print_line("basic");
+    print_stu_basic(stu);
+    print_line("travel");
+    print_stu_travel(stu);
+    print_line("back");
+    print_stu_back(stu);
+    print_line(NULL);
+}
 
-    Stu_Info *sp;
-    int last = buff->length - 1; //指向最后一个有数据的地方
-    for (int i = 0; i < last + 1; i++)
-    {
-        sp = *(buff->stu_map + i);
-        if (sp == NULL) //清理空闲缓存
-        {
-            while (i < last)
-            {
-                if ((sp = *(buff->stu_map + last)) != NULL) //填入最后一个数据
-                {
-                    *(buff->stu_map + i) = sp;
-                    *(buff->stu_map + last) = NULL;
-                    last--;
-                    break;
-                }
-                last--;
-            }
-            if (sp == NULL) //之后的缓存都为空，整理完成
-            {
-                break;
-            }
-        }
+void print_stu_basic(Stu_Info stu)
+{
+    printf("number:%d\n", stu.num);
+    printf("name:%s\n", stu.name);
+    printf("id:%lld\n", stu.id);
+    char stype[10] = "";
+    get_stype(stype, stu.stype);
+    printf("type:%s\n", stype);
+    char ctype[20] = "";
+    get_college(ctype, stu.ctype);
+    printf("college:%s\n", ctype);
+    printf("major:%s\n", stu.major);
+}
 
-        if (i > 0) //插入排序
-        {
-            if ((sp->num < (*(buff->stu_map + i - 1))->num))
-            {
-                *(buff->stu_map + i) = *(buff->stu_map + i - 1);
-                for (int j = i - 1; j > 0; j--)
-                {
-                    if ((sp->num >= (*(buff->stu_map + j - 1))->num)) //大于等于上一个数
-                    {
-                        *(buff->stu_map + j) = sp;
-                        break;
-                    }
-                    *(buff->stu_map + j) = *(buff->stu_map + j - 1); //上一个数后移
-                }
-            }
-        }
-    }
-    return 1;
+void print_stu_travel(Stu_Info stu)
+{
+    printf("road:%s\n", stu.trafo.road);
+    printf("contact:%s\n", stu.trafo.contact);
+}
+
+void print_stu_back(Stu_Info stu)
+{
+    printf("temperature:%.1f\n", stu.bacfo.temperature);
+    printf("medical histroy:%s\n", stu.bacfo.medical_h);
+    printf("has symptoms?");
+    bool_printf(stu.bacfo.symptoms);
+    printf("back date:%s\n", stu.bacfo.back_date);
 }

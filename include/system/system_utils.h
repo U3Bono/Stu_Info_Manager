@@ -12,7 +12,11 @@ typedef enum
 
 int init_stu(Stu_Info *stu);                                        //初始化学生信息
 void input_info(Stu_Info *student);                                 //输入学生信息
-int search_info(Buf_Stu *buff, Stu_Info *search_stu, Search_Op op); //根据属性查询学生信息,返回位置
-int clean_buff(Buf_Stu *buff);                                      //整理学生信息
+int modify_info(Stu_Info *new_stu);                                 //修改学生信息
+int search_info(Buf_Stu *buff, Stu_Info *search_stu, Search_Op op); //查询学生信息
+void print_stu(Stu_Info stu);                                       //打印学生信息
+void print_stu_basic(Stu_Info stu);
+void print_stu_travel(Stu_Info stu);
+void print_stu_back(Stu_Info stu);
 
 #endif

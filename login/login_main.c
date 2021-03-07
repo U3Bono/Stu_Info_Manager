@@ -24,7 +24,7 @@ L1:
     }
 }
 
-static int login(User_Info *login_user)
+int login(User_Info *login_user)
 {
     if (login_user == NULL)
     {
@@ -68,9 +68,24 @@ static int login(User_Info *login_user)
     return 1;
 }
 
-static void initUser()
+void initUser()
 {
     strcat(user.username, "");
     strcat(user.password, "");
     user.type = -1;
+}
+
+void print_user(User_Info user)
+{
+    printf("user name:%s\n", user.username);
+    printf("user type:");
+    if (user.type == 0)
+    {
+        printf("%s", "root");
+    }
+    else
+    {
+        printf("%s", "normal");
+    }
+    printf("(%d)\n", user.type);
 }

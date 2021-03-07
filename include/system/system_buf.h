@@ -22,5 +22,6 @@ int get_list(Buf_Stu *buff);                      //读入到缓存
 int set_list(Buf_Stu *buff);                      //写出到磁盘
 int switch_buff(Buf_Stu *buff, Col_Type s_ctype); //切换列表缓存
 int save_list(Buf_Stu *buff, char *fname);        //格式化输出到磁盘
+int clean_buff(Buf_Stu *buff);                    //整理缓存
 
 #endif

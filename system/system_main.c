@@ -174,85 +174,30 @@ void modify_stu(Buf_Stu *buff)
     {
         return;
     }
-    Stu_Info student;
-    init_stu(&student);
+    Stu_Info new_stu;
+    init_stu(&new_stu);
     printf("id:"); //id
-    scanf("%lld", &student.id);
+    scanf("%lld", &new_stu.id);
     printf("college(0-11):"); //院校
-    scanf("%d", &student.ctype);
+    scanf("%d", &new_stu.ctype);
 
-    switch_buff(buff, student.ctype);
+    switch_buff(buff, new_stu.ctype);
 
-    int position = search_info(buff, &student, ID); //查询记录学生信息
+    int position = search_info(buff, &new_stu, ID); //查询记录学生信息
     if (position == -1)
     {
         printf("No student.(4)\n");
         return;
     }
-
-    print_stu(student); //打印信息
-    char *options[] = {"number", "name", "type", "major",
-                       "road", "contact", "temperature", "medical histroy", "has symptoms?", "back date"};
-    print_star(" Options ");
-    for (int i = 0; i < 10; i++) //打印选项
+    if (modify_info(&new_stu))
     {
-        printf("%d.%s\n", i, *(options + i));
-    }
-    print_star("Select");
-    int op;
-    scanf("%d", &op);
-    if (op == 9)
-    {
-        printf("%s:", *(options + op));
+        **(buff->stu_map + position) = new_stu;
+        printf("Modify success!\n");
     }
     else
     {
-        printf("new %s:", *(options + op));
+        printf("Failed!\n");
     }
-
-    switch (op)
-    {
-    case 0:
-        scanf("%d", &(student.num));
-        if (search_info(buff, &student, NUMBER) != -1)
-        {
-            printf("Existed!\n");
-            return;
-        }
-        break;
-    case 1:
-        scanf("%s", student.name);
-        break;
-    case 2:
-        scanf("%d", &(student.stype));
-        break;
-    case 3:
-        scanf("%s", student.major);
-        break;
-    case 4:
-        scanf("%s", student.trafo.road);
-        break;
-    case 5:
-        scanf("%s", student.trafo.contact);
-        break;
-    case 6:
-        scanf("%f", &(student.bacfo.temperature));
-        break;
-    case 7:
-        scanf("%s", student.bacfo.medical_h);
-        break;
-    case 8:
-        scanf("%d", &(student.bacfo.symptoms));
-        break;
-    case 9:
-        scanf("%s", student.bacfo.back_date);
-        break;
-    default:
-        break;
-    }
-
-    **(buff->stu_map + position) = student;
-    printf("Modify success!\n");
 }
 
 void clear_list(Buf_Stu *buff)

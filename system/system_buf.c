@@ -190,3 +190,54 @@ int save_list(Buf_Stu *buff, char *fname)
     fclose(fp);
     return 1;
 }
+
+int clean_buff(Buf_Stu *buff)
+{
+    if (buff == NULL | buff->stu_map == NULL)
+    {
+        return 0;
+    }
+
+    Stu_Info *sp;
+    int last = buff->length - 1; //指向最后一个有数据的地方
+    for (int i = 0; i < last + 1; i++)
+    {
+        sp = *(buff->stu_map + i);
+        if (sp == NULL) //清理空闲缓存
+        {
+            while (i < last)
+            {
+                if ((sp = *(buff->stu_map + last)) != NULL) //填入最后一个数据
+                {
+                    *(buff->stu_map + i) = sp;
+                    *(buff->stu_map + last) = NULL;
+                    last--;
+                    break;
+                }
+                last--;
+            }
+            if (sp == NULL) //之后的缓存都为空，整理完成
+            {
+                break;
+            }
+        }
+
+        if (i > 0) //插入排序
+        {
+            if ((sp->num < (*(buff->stu_map + i - 1))->num))
+            {
+                *(buff->stu_map + i) = *(buff->stu_map + i - 1);
+                for (int j = i - 1; j > 0; j--)
+                {
+                    if ((sp->num >= (*(buff->stu_map + j - 1))->num)) //大于等于上一个数
+                    {
+                        *(buff->stu_map + j) = sp;
+                        break;
+                    }
+                    *(buff->stu_map + j) = *(buff->stu_map + j - 1); //上一个数后移
+                }
+            }
+        }
+    }
+    return 1;
+}

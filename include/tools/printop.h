@@ -14,12 +14,6 @@ void print_line(char *title);
 void print_pause(char *notice);
 void bool_printf(int bl);
 
-void print_user(User_Info user);
-void print_stu(Stu_Info stu);
-void print_stu_basic(Stu_Info stu);
-void print_stu_travel(Stu_Info stu);
-void print_stu_back(Stu_Info stu);
-
 void flushiobuf();
 
 #endif
