@@ -4,10 +4,10 @@ void print_logo()
 {
     printf("*********************************************************\n");
     printf("*%55s*\n", " ");
-    printf("*%14s%s%14s*\n", " ", SYS_NAME, " ");
+    printf("*%40s%15s*\n", SYS_NAME, " ");
     printf("*%55s*\n", " ");
-    printf("*%43s%s%8s*\n", "version:", SYS_VERSION, " ");
-    printf("*%42s%s%6s*\n", "author:", SYS_AUTHOR, " ");
+    printf("*%46s%s%5s*\n", "version:", SYS_VERSION, " ");
+    printf("*%45s%s%3s*\n", "author:", SYS_AUTHOR, " ");
     printf("*%55s*\n", " ");
     printf("*********************************************************\n");
 }

@@ -6,7 +6,7 @@ void system_main()
     init_buf(&buff);
     get_list(&buff);
 
-    char *options[] = {"exit", "search", "add", "delect", "modify", "clear", "print", "save"};
+    char *options[] = {"exit", "search", "add", "delect", "modify", "clear", "print", "output"};
     int power = (user.type == 0) ? 8 : 2;
 L1:
     system("clear");
@@ -44,7 +44,7 @@ L1:
         print_list(&buff);
         break;
     case 7:
-        save_info(&buff);
+        output_info(&buff);
         break;
     default:
         break;
@@ -313,7 +313,7 @@ void print_list(Buf_Stu *buff)
     }
 }
 
-void save_info(Buf_Stu *buff)
+void output_info(Buf_Stu *buff)
 {
     if (buff == NULL)
     {
