@@ -23,7 +23,7 @@ void destroy_buf(Buf_Stu *buff)
     init_buf(buff);
 }
 
-int enlarge_buf(Buf_Stu *buff, int length)
+int get_buf(Buf_Stu *buff, int length)
 {
     if (buff == NULL)
     {
@@ -118,7 +118,7 @@ int set_list(Buf_Stu *buff)
 
 int switch_buff(Buf_Stu *buff, Col_Type s_ctype)
 {
-    if (buff == NULL)
+    if (buff == NULL | buff->col_type == s_ctype)
     {
         return 0;
     }
@@ -131,8 +131,7 @@ int switch_buff(Buf_Stu *buff, Col_Type s_ctype)
     buff->col_type = s_ctype; //切换院校
     if (!get_list(buff))      //未读取到数据
     {
-        buff->stu_map = NULL;
-        buff->length = 0;
+        destroy_buf(buff); //清空缓存
     }
 
     return 1;

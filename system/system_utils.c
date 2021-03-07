@@ -60,10 +60,7 @@ int search_info(Buf_Stu *buff, Stu_Info *search_stu, Search_Op op)
         return -1;
     }
 
-    if (buff->col_type != search_stu->ctype) //院校不同则切换缓存
-    {
-        switch_buff(buff, search_stu->ctype);
-    }
+    switch_buff(buff, search_stu->ctype);
 
     Stu_Info *sp;
     for (int i = 0; i < buff->length; i++)
@@ -102,7 +99,7 @@ int search_info(Buf_Stu *buff, Stu_Info *search_stu, Search_Op op)
     return -1;
 }
 
-int renew_info(Buf_Stu *buff)
+int clean_buff(Buf_Stu *buff)
 {
     if (buff == NULL | buff->stu_map == NULL)
     {
@@ -133,17 +130,20 @@ int renew_info(Buf_Stu *buff)
             }
         }
 
-        if ((sp->num < (*(buff->stu_map + i - 1))->num)) //插入排序
+        if (i > 0) //插入排序
         {
-            *(buff->stu_map + i) = *(buff->stu_map + i - 1);
-            for (int j = i - 1; j > 0; j--)
+            if ((sp->num < (*(buff->stu_map + i - 1))->num))
             {
-                if ((sp->num >= (*(buff->stu_map + j - 1))->num)) //大于等于上一个数
+                *(buff->stu_map + i) = *(buff->stu_map + i - 1);
+                for (int j = i - 1; j > 0; j--)
                 {
-                    *(buff->stu_map + j) = sp;
-                    break;
+                    if ((sp->num >= (*(buff->stu_map + j - 1))->num)) //大于等于上一个数
+                    {
+                        *(buff->stu_map + j) = sp;
+                        break;
+                    }
+                    *(buff->stu_map + j) = *(buff->stu_map + j - 1); //上一个数后移
                 }
-                *(buff->stu_map + j) = *(buff->stu_map + j - 1); //上一个数后移
             }
         }
     }

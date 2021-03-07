@@ -2,3 +2,4 @@ v0.10	I/O based on file.
 v0.20	Add sequence buffer.
 V1.00	I/O based on map buffer.
 v1.10   Add buffer cleaner.
+v1.12   Update buffer cleaner & buffer switcher;Optimize sys_main().

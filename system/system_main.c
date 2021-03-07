@@ -6,8 +6,9 @@ void system_main()
     init_buf(&buff);
     get_list(&buff);
 
-    char *options[] = {"exit", "search", "add", "delect", "modify", "clear", "print", "output"};
-    int power = (user.type == 0) ? 8 : 2;
+    char *op_arr[] = {"exit", "logout", "search", "add", "delect", "modify", "clear", "print", "output"};
+    void (*fun_arr[])(Buf_Stu * buff) = {exit_sys, exit_login, search_stu, add_stu, delect_stu, modify_stu, clear_list, print_list, output_info};
+    int power = (user.type == 0) ? sizeof(op_arr) / sizeof(*op_arr) : 3;
 L1:
     system("clear");
     print_star("User Info");
@@ -15,42 +16,27 @@ L1:
     print_star(" Options ");
     for (int i = 0; i < power; i++)
     {
-        printf("%d.%s\n", i, *(options + i));
+        printf("%d.%s\n", i, op_arr[i]);
     }
     print_star(" Select ");
     int op;
     scanf("%d", &op);
-    switch (op)
-    {
-    case 0:
-        exit_login(&buff);
-        break;
-    case 1:
-        search_stu(&buff);
-        break;
-    case 2:
-        add_stu(&buff);
-        break;
-    case 3:
-        delect_stu(&buff);
-        break;
-    case 4:
-        modify_stu(&buff);
-        break;
-    case 5:
-        clear_list(&buff);
-        break;
-    case 6:
-        print_list(&buff);
-        break;
-    case 7:
-        output_info(&buff);
-        break;
-    default:
-        break;
-    }
+    fun_arr[op](&buff);
+
     print_pause("Please input any key to continum...");
     goto L1;
+}
+
+void exit_sys(Buf_Stu *buff)
+{
+    if (buff == NULL)
+    {
+        return;
+    }
+    set_list(buff);    //回写磁盘
+    destroy_buf(buff); //清理缓存
+    system("clear");
+    exit(0);
 }
 
 void exit_login(Buf_Stu *buff)
@@ -72,10 +58,10 @@ void search_stu(Buf_Stu *buff)
     }
     system("clear");
     print_star(" Search ");
-    char *options[] = {"number", "name", "id", "back"};
+    char *op_arr[] = {"number", "name", "id", "back"};
     for (int i = 0; i < 4; i++)
     {
-        printf("%d.%s\n", i, *(options + i));
+        printf("%d.%s\n", i, op_arr[i]);
     }
 
     print_star(NULL);
@@ -122,10 +108,7 @@ void add_stu(Buf_Stu *buff)
     Stu_Info student;
     input_info(&student);
 
-    if (buff->col_type != student.ctype) //不同院校
-    {
-        switch_buff(buff, student.ctype);
-    }
+    switch_buff(buff, student.ctype);
 
     int free_buf = -1; //空闲缓存位置
     Stu_Info *sp;
@@ -149,7 +132,7 @@ void add_stu(Buf_Stu *buff)
     if (free_buf == -1) //没有空闲
     {
         free_buf = buff->length;
-        enlarge_buf(buff, 10); //扩充映射表
+        get_buf(buff, 10); //扩充映射表
     }
 
     sp = malloc(sizeof(Stu_Info)); //分配内存
@@ -171,10 +154,7 @@ void delect_stu(Buf_Stu *buff)
     printf("college(0-11):"); //院校
     scanf("%d", &student.ctype);
 
-    if (student.ctype != buff->col_type) //不同院校
-    {
-        switch_buff(buff, student.ctype);
-    }
+    switch_buff(buff, student.ctype);
 
     int position = search_info(buff, &student, ID);
     if (position == -1)
@@ -201,10 +181,7 @@ void modify_stu(Buf_Stu *buff)
     printf("college(0-11):"); //院校
     scanf("%d", &student.ctype);
 
-    if (student.ctype != buff->col_type) //不同院校
-    {
-        switch_buff(buff, student.ctype);
-    }
+    switch_buff(buff, student.ctype);
 
     int position = search_info(buff, &student, ID); //查询记录学生信息
     if (position == -1)
@@ -284,7 +261,14 @@ void clear_list(Buf_Stu *buff)
     {
         return;
     }
-    if (renew_info(buff))
+
+    Col_Type col_type;
+    printf("college(0-11):"); //院校
+    scanf("%d", &col_type);
+
+    switch_buff(buff, col_type);
+
+    if (clean_buff(buff))
     {
         printf("Clear success!\n");
     }
@@ -300,6 +284,13 @@ void print_list(Buf_Stu *buff)
     {
         return;
     }
+
+    Col_Type col_type;
+    printf("college(0-11):"); //院校
+    scanf("%d", &col_type);
+
+    switch_buff(buff, col_type);
+
     print_star("Information");
     Stu_Info *sp;
     for (int i = 0; i < buff->length; i++)
@@ -319,6 +310,13 @@ void output_info(Buf_Stu *buff)
     {
         return;
     }
+
+    Col_Type col_type;
+    printf("college(0-11):"); //院校
+    scanf("%d", &col_type);
+
+    switch_buff(buff, col_type);
+
     char fname[30];
     printf("File name:");
     scanf("%s", fname);

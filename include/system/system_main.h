@@ -8,6 +8,7 @@
 
 void system_main();
 
+void exit_sys(Buf_Stu *buff);
 void exit_login(Buf_Stu *buff);
 void search_stu(Buf_Stu *buff);
 void add_stu(Buf_Stu *buff);
