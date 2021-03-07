@@ -62,7 +62,7 @@ static int login(User_Info *login_user)
 
         fseek(fp, 0, 2);
         login_user->type = 1;
-        fwrite(login_user, sizeof(User_Info), 1, fp); //未匹配到用户则直接添加用户
+        fwrite(login_user, sizeof(User_Info), 1, fp); //未匹配到用户则创建用户
     }
     fclose(fp);
     return 1;
@@ -70,8 +70,7 @@ static int login(User_Info *login_user)
 
 static void initUser()
 {
-    char zero = '\0';
-    memcpy(&(user.username), &zero, sizeof(char));
-    memcpy(&(user.password), &zero, sizeof(char));
+    strcat(user.username, "");
+    strcat(user.password, "");
     user.type = -1;
 }

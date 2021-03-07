@@ -11,10 +11,10 @@ typedef struct
 
 typedef struct
 {
-    float temperature; //体温
-    char medical_h[200];      //病史
-    int symptoms;             //是否有相关症状
-    char back_date[9];        //返校时间（格式xxxx-xx-xx）
+    float temperature;   //体温
+    char medical_h[200]; //病史
+    int symptoms;        //是否有相关症状
+    char back_date[9];   //返校时间（格式xxxx-xx-xx）
 } Back_Info;
 
 typedef enum
