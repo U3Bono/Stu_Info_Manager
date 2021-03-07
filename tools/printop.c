@@ -3,12 +3,12 @@
 void print_logo()
 {
     printf("*********************************************************\n");
-    printf("*\t\t\t\t\t\t\t*\n");
-    printf("*\t\tStudent Information Manager\t\t*\n");
-    printf("*\t\t\t\t\t\t\t*\n");
-    printf("*\t\t\t\t\tversion:%s\t*\n", SYS_VERSION);
-    printf("*\t\t\t\t\tauthor:%s\t*\n", SYS_AUTHOR);
-    printf("*\t\t\t\t\t\t\t*\n");
+    printf("*%55s*\n", " ");
+    printf("*%14s%s%14s*\n", " ", SYS_NAME, " ");
+    printf("*%55s*\n", " ");
+    printf("*%43s%s%8s*\n", "version:", SYS_VERSION, " ");
+    printf("*%42s%s%6s*\n", "author:", SYS_AUTHOR, " ");
+    printf("*%55s*\n", " ");
     printf("*********************************************************\n");
 }
 
