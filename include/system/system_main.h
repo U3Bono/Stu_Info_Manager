@@ -1,7 +1,11 @@
+/**
+ *  管理系统系统
+ **/
+
 #ifndef _system_main_h
 #define _system_main_h
 
-#include "system_utils.h"
+#include "system_buf.h"
 #include "../login/login_main.h"
 
 void system_main();

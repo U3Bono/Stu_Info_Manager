@@ -1,11 +1,14 @@
+/**
+ * 登陆系统
+ **/
+
 #ifndef _login_main_h
 #define _login_main_h
 
 #include "../information/user_info.h"
-#include "../tools/printop.h"
 #include "../system/system_main.h"
-
-#include <string.h>
+#include "../tools/printop.h"
+#include "../tools/stringop.h"
 
 User_Info user; //用户登陆信息
 

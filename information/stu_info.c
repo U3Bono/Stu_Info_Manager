@@ -1,4 +1,4 @@
-#include "../include/information/stu_info.h"
+#include "../include/information/stu_info_basic.h"
 
 int get_college(char *college, Col_Type ctype)
 {

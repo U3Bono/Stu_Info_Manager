@@ -8,7 +8,7 @@
       "name": "clang++ - Build and debug active file", // 配置名称
       "type": "cppdbg", // 配置类型
       "request": "launch", // 请求配置类型,launch或者attach
-      "program": "${workspaceFolder}/build/Algorithm", // 进行调试程序的路径(主要)
+      "program": "${workspaceFolder}/build/Stu_Info_Manager", // 进行调试程序的路径(主要)
       "args": [], // 传递给程序的命令行参数，一般为空
       "stopAtEntry": true, // 调试器是否在目标的入口点停止，
       "cwd": "${workspaceFolder}", // 项目目录

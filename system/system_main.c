@@ -2,6 +2,7 @@
 
 void system_main()
 {
+    choose_itype(EPIDEMIC);
     Buf_Stu buff;
     init_buf(&buff);
     get_list(&buff);
@@ -58,7 +59,7 @@ void search_stu(Buf_Stu *buff)
     }
     system("clear");
     print_star(" Search ");
-    char *op_arr[] = {"number", "name", "id", "back"};
+    char *op_arr[] = {"back", "number", "name", "id"};
     for (int i = 0; i < 4; i++)
     {
         printf("%d.%s\n", i, op_arr[i]);
@@ -66,37 +67,40 @@ void search_stu(Buf_Stu *buff)
 
     print_star(NULL);
     printf("select:");
-    Stu_Info search_stu; //学生信息
-    Search_Op op;        //查询操作
+    void *stu = malloc(buff->stu_size); //学生信息
+    Search_Op op;                       //查询操作
     scanf("%d", &op);
     switch (op)
     {
     case NUMBER:
         printf("number:");
-        scanf("%d", &search_stu.num);
+        scanf("%d", &((Stu_Basic *)stu)->num);
         break;
     case NAME:
         printf("name:");
-        scanf("%s", search_stu.name);
+        scanf("%s", ((Stu_Basic *)stu)->name);
         break;
     case ID:
         printf("id:");
-        scanf("%lld", &search_stu.id);
+        scanf("%lld", &((Stu_Basic *)stu)->id);
         break;
     default:
         return;
     }
     printf("college(0-11):"); //院校
-    scanf("%d", &search_stu.ctype);
+    scanf("%d", &((Stu_Basic *)stu)->ctype);
 
-    if (search_info(buff, &search_stu, op) == -1)
+    switch_buff(buff, ((Stu_Basic *)stu)->ctype);
+
+    if (search_info(buff->stu_map, buff->length, stu, op) == -1)
     {
         printf("No student.(2)\n");
     }
     else
     {
-        print_stu(search_stu);
+        print_stu(stu);
     }
+    free(stu);
 }
 
 void add_stu(Buf_Stu *buff)
@@ -105,13 +109,13 @@ void add_stu(Buf_Stu *buff)
     {
         return;
     }
-    Stu_Info student;
-    input_info(&student);
+    void *stu = malloc(buff->stu_size); //学生信息
+    input_info(stu);
 
-    switch_buff(buff, student.ctype);
+    switch_buff(buff, (*(Stu_Basic *)stu).ctype);
 
     int free_buf = -1; //空闲缓存位置
-    Stu_Info *sp;
+    void *sp;
     for (int i = 0; i < buff->length; i++)
     {
         sp = *(buff->stu_map + i);
@@ -121,7 +125,7 @@ void add_stu(Buf_Stu *buff)
         }
         else
         {
-            if (sp->num == student.num || sp->id == student.id)
+            if (((Stu_Basic *)sp)->num == ((Stu_Basic *)stu)->num || ((Stu_Basic *)sp)->id == ((Stu_Basic *)stu)->id)
             {
                 printf("Existed!\n");
                 return;
@@ -135,9 +139,10 @@ void add_stu(Buf_Stu *buff)
         get_buf(buff, 10); //扩充映射表
     }
 
-    sp = malloc(sizeof(Stu_Info)); //分配内存
-    *(sp) = student;
+    sp = malloc(buff->stu_size); //分配内存
+    memcpy(sp, stu, buff->stu_size);
     *(buff->stu_map + free_buf) = sp; //写入映射表
+    free(stu);
 
     printf("Add success!\n");
 }
@@ -148,15 +153,15 @@ void delect_stu(Buf_Stu *buff)
     {
         return;
     }
-    Stu_Info student;
-    printf("id:"); //id
-    scanf("%lld", &student.id);
+    void *stu = malloc(buff->stu_size); //学生信息
+    printf("id:");                      //id
+    scanf("%lld", &((Stu_Basic *)stu)->id);
     printf("college(0-11):"); //院校
-    scanf("%d", &student.ctype);
+    scanf("%d", &((Stu_Basic *)stu)->ctype);
 
-    switch_buff(buff, student.ctype);
+    switch_buff(buff, ((Stu_Basic *)stu)->ctype);
 
-    int position = search_info(buff, &student, ID);
+    int position = search_info(buff->stu_map, buff->length, stu, ID);
     if (position == -1)
     {
         printf("No student.(3)\n");
@@ -165,6 +170,7 @@ void delect_stu(Buf_Stu *buff)
 
     free(*(buff->stu_map + position));
     *(buff->stu_map + position) = NULL;
+    free(stu);
     printf("Delect success!\n");
 }
 
@@ -174,28 +180,30 @@ void modify_stu(Buf_Stu *buff)
     {
         return;
     }
-    Stu_Info new_stu;
-    init_stu(&new_stu);
+    void *stu = malloc(buff->stu_size); //学生信息
+    init_stu(stu);
     printf("id:"); //id
-    scanf("%lld", &new_stu.id);
+    scanf("%lld", &((Stu_Basic *)stu)->id);
     printf("college(0-11):"); //院校
-    scanf("%d", &new_stu.ctype);
+    scanf("%d", &((Stu_Basic *)stu)->ctype);
 
-    switch_buff(buff, new_stu.ctype);
+    switch_buff(buff, ((Stu_Basic *)stu)->ctype);
 
-    int position = search_info(buff, &new_stu, ID); //查询记录学生信息
+    int position = search_info(buff->stu_map, buff->length, stu, ID); //查询记录学生信息
     if (position == -1)
     {
         printf("No student.(4)\n");
         return;
     }
-    if (modify_info(&new_stu))
+    if (modify_info(stu))
     {
-        **(buff->stu_map + position) = new_stu;
+        memcpy(*(buff->stu_map + position), stu, buff->stu_size);
+        free(stu);
         printf("Modify success!\n");
     }
     else
     {
+        free(stu);
         printf("Failed!\n");
     }
 }
@@ -236,14 +244,20 @@ void print_list(Buf_Stu *buff)
 
     switch_buff(buff, col_type);
 
+    if (buff->length == 0)
+    {
+        printf("No student.(5)\n");
+        return;
+    }
+
     print_star("Information");
-    Stu_Info *sp;
+    void *sp;
     for (int i = 0; i < buff->length; i++)
     {
         sp = *(buff->stu_map + i);
         if (sp != NULL)
         {
-            print_stu_basic(*sp);
+            print_stu_basic(*(Stu_Basic *)sp);
             print_line(NULL);
         }
     }

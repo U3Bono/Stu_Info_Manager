@@ -1,3 +1,7 @@
+/**
+ * 打印工具 
+ **/
+
 #ifndef _printop_h
 #define _printop_h
 

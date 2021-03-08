@@ -71,7 +71,16 @@
         "printop.h": "c",
         "system_utils.h": "c",
         "stdio.h": "c",
-        "system_buf.h": "c"
+        "system_buf.h": "c",
+        "stu_info_basic.h": "c",
+        "epidemic_utils.h": "c",
+        "stu_info_epid.h": "c",
+        "stu_utils.h": "c",
+        "base_utils.h": "c",
+        "basic_utils.h": "c",
+        "stu_basic.h": "c",
+        "stu_main.h": "c",
+        "stu_epidemic.h": "c"
     },
     "C_Cpp.errorSquiggles": "Disabled"
 }

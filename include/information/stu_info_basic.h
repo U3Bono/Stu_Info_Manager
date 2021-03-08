@@ -1,21 +1,8 @@
-#ifndef _stu_info_h
-#define _stu_info_h
+#ifndef _stu_info_basic_h
+#define _stu_info_basic_h
 
-#include <string.h>
-
-typedef struct
-{
-    char road[200];    //路途（格式xx-xx-xx）
-    char contact[200]; //接触人员(格式xx,xx,xx)
-} Travel_Info;
-
-typedef struct
-{
-    float temperature;   //体温
-    char medical_h[200]; //病史
-    int symptoms;        //是否有相关症状
-    char back_date[9];   //返校时间（格式xxxx-xx-xx）
-} Back_Info;
+#include "stu_info_epid.h"
+#include "../tools/stringop.h"
 
 typedef enum
 {
@@ -42,15 +29,13 @@ typedef enum
 
 typedef struct
 {
-    int num;               //学号
+    int num;               //学号(主键)
     char name[40];         //姓名
-    unsigned long long id; //身份证id(主键)
+    unsigned long long id; //身份证号
     Stu_Type stype;        //学生类型
     Col_Type ctype;        //学院
     char major[40];        //专业
-    Travel_Info trafo;     //旅行史
-    Back_Info bacfo;       //返校信息
-} Stu_Info;
+} Stu_Basic;
 
 int get_college(char *college, Col_Type ctype);
 int get_stype(char *student, Stu_Type stype);
