@@ -18,6 +18,22 @@ void get_itype(char *s)
     }
 }
 
+int get_ssize()
+{
+    int size = sizeof(Stu_Basic);
+
+    switch (info_type)
+    {
+    case EPIDEMIC:
+        size += sizeof(Stu_Epid);
+        break;
+
+    default:
+        break;
+    }
+    return size;
+}
+
 int init_stu(void *stu)
 {
     if (stu == NULL)
@@ -114,6 +130,7 @@ void print_stu(void *stu)
         print_line("epidemic");
         print_stu_epid(*(Stu_Epid *)(stu + sizeof(Stu_Basic)));
         break;
+
     default:
         break;
     }
@@ -134,6 +151,7 @@ int save_stu_title(FILE *fp)
     case EPIDEMIC:
         save_stu_epid_title(fp);
         break;
+
     default:
         break;
     }
@@ -154,6 +172,7 @@ int save_stu_value(FILE *fp, void *stu)
     case EPIDEMIC:
         save_stu_epid_value(fp, stu + sizeof(Stu_Basic));
         break;
+        
     default:
         break;
     }

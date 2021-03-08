@@ -1,3 +1,8 @@
+/**
+ *  学生所有信息综合管理
+ *  （信息类型添加需要实现basic方法，并添加到管理函数中）
+ **/
+
 #ifndef _stu_main_h
 #define _stu_main_h
 
@@ -16,10 +21,11 @@ typedef enum
     ID          //身份证
 } Search_Op;
 
-Info_Type info_type; //信息类型
+static Info_Type info_type; //操作信息类型
 
 void choose_itype(Info_Type itype); //选择信息类型
 void get_itype(char *s);            //获得信息类型名
+int get_ssize();                    //获取学生信息大小
 
 int input_info(void *stu);    //输入
 int modify_info(void *stu);   //修改

@@ -5,17 +5,7 @@ void init_buf(Buf_Stu *buff)
     buff->stu_map = NULL;
     buff->length = 0;
     buff->col_type = 0;
-    buff->stu_size = sizeof(Stu_Basic);
-
-    switch (info_type)
-    {
-    case EPIDEMIC:
-        buff->stu_size += sizeof(Stu_Epid);
-        break;
-
-    default:
-        break;
-    }
+    buff->stu_size = get_ssize();
 }
 
 void destroy_buf(Buf_Stu *buff)
@@ -149,58 +139,6 @@ int switch_buff(Buf_Stu *buff, Col_Type s_ctype)
     return 1;
 }
 
-int clean_buff(Buf_Stu *buff)
-{
-    if (buff == NULL | buff->stu_map == NULL)
-    {
-        return 0;
-    }
-
-    Stu_Basic *sp;
-    int last = buff->length - 1; //指向最后一个有数据的地方
-    for (int i = 0; i < last + 1; i++)
-    {
-        sp = *(buff->stu_map + i);
-        if (sp == NULL) //清理空闲缓存
-        {
-            while (i < last)
-            {
-                if ((sp = *(buff->stu_map + last)) != NULL) //填入最后一个数据
-                {
-                    *(buff->stu_map + i) = sp;
-                    *(buff->stu_map + last) = NULL;
-                    last--;
-                    break;
-                }
-                last--;
-            }
-            if (sp == NULL) //之后的缓存都为空，整理完成
-            {
-                break;
-            }
-        }
-
-        if (i > 0) //插入排序
-        {
-            if ((sp->num < ((Stu_Basic *)*(buff->stu_map + i - 1))->num))
-            {
-                *(buff->stu_map + i) = *(buff->stu_map + i - 1);
-                for (int j = i - 1; j > 0; j--)
-                {
-                    if (sp->num >= ((Stu_Basic *)*(buff->stu_map + j - 1))->num) //大于等于上一个数
-                    {
-                        *(buff->stu_map + j) = sp;
-                        break;
-                    }
-
-                    *(buff->stu_map + j) = *(buff->stu_map + j - 1); //上一个数后移
-                }
-            }
-        }
-    }
-    return 1;
-}
-
 int save_list(Buf_Stu *buff, char *fname)
 {
     if (buff == NULL)
@@ -226,5 +164,57 @@ int save_list(Buf_Stu *buff, char *fname)
     }
 
     fclose(fp);
+    return 1;
+}
+
+int clean_buff(Buf_Stu *buff)
+{
+    if (buff == NULL | buff->stu_map == NULL)
+    {
+        return 0;
+    }
+
+    void *sp;
+    int last = buff->length - 1; //指向最后一个有数据的地方
+    for (int i = 0; i < last + 1; i++)
+    {
+        sp = *(buff->stu_map + i);
+        if (sp == NULL) //清理空闲缓存
+        {
+            while (i < last)
+            {
+                if ((sp = *(buff->stu_map + last)) != NULL) //填入最后一个数据
+                {
+                    *(buff->stu_map + i) = sp;
+                    *(buff->stu_map + last) = NULL;
+                    last--;
+                    break;
+                }
+                last--;
+            }
+            if (sp == NULL) //之后的缓存都为空，整理完成
+            {
+                break;
+            }
+        }
+
+        if (i > 0) //插入排序
+        {
+            if ((((Stu_Basic *)sp)->num < ((Stu_Basic *)*(buff->stu_map + i - 1))->num))
+            {
+                *(buff->stu_map + i) = *(buff->stu_map + i - 1);
+                for (int j = i - 1; j > 0; j--)
+                {
+                    if (((Stu_Basic *)sp)->num >= ((Stu_Basic *)*(buff->stu_map + j - 1))->num) //大于等于上一个数
+                    {
+                        *(buff->stu_map + j) = sp;
+                        break;
+                    }
+
+                    *(buff->stu_map + j) = *(buff->stu_map + j - 1); //上一个数后移
+                }
+            }
+        }
+    }
     return 1;
 }
