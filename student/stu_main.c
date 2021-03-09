@@ -34,7 +34,7 @@ int get_ssize()
     return size;
 }
 
-int init_stu(void *stu)
+int init_stu(Stu_Basic *stu)
 {
     if (stu == NULL)
     {
@@ -46,7 +46,7 @@ int init_stu(void *stu)
     switch (info_type)
     {
     case EPIDEMIC:
-        init_stu_epid(stu + sizeof(Stu_Basic));
+        init_stu_epid((void *)stu + sizeof(Stu_Basic));
         break;
 
     default:
@@ -56,7 +56,7 @@ int init_stu(void *stu)
     return 1;
 }
 
-int input_info(void *stu)
+int input_info(Stu_Basic *stu)
 {
     if (stu == NULL)
     {
@@ -68,7 +68,7 @@ int input_info(void *stu)
     switch (info_type)
     {
     case EPIDEMIC:
-        input_info_epid(stu + sizeof(Stu_Basic));
+        input_info_epid((void *)stu + sizeof(Stu_Basic));
         break;
 
     default:
@@ -78,7 +78,7 @@ int input_info(void *stu)
     return 1;
 }
 
-int modify_info(void *stu)
+int modify_info(Stu_Basic *stu)
 {
     if (stu == NULL)
     {
@@ -107,7 +107,7 @@ int modify_info(void *stu)
         switch (info_type)
         {
         case EPIDEMIC:
-            modify_info_epid(stu + sizeof(Stu_Basic));
+            modify_info_epid((void *)stu + sizeof(Stu_Basic));
             break;
 
         default:
@@ -118,7 +118,7 @@ int modify_info(void *stu)
     return 1;
 }
 
-void print_stu(void *stu)
+void print_stu(Stu_Basic *stu)
 {
     print_line("basic");
 
@@ -128,7 +128,7 @@ void print_stu(void *stu)
     {
     case EPIDEMIC:
         print_line("epidemic");
-        print_stu_epid(*(Stu_Epid *)(stu + sizeof(Stu_Basic)));
+        print_stu_epid(*(Stu_Epid *)((void *)stu + sizeof(Stu_Basic)));
         break;
 
     default:
@@ -159,7 +159,7 @@ int save_stu_title(FILE *fp)
     return 1;
 }
 
-int save_stu_value(FILE *fp, void *stu)
+int save_stu_value(FILE *fp, Stu_Basic *stu)
 {
     if (fp == NULL || stu == NULL)
     {
@@ -170,9 +170,9 @@ int save_stu_value(FILE *fp, void *stu)
     switch (info_type)
     {
     case EPIDEMIC:
-        save_stu_epid_value(fp, stu + sizeof(Stu_Basic));
+        save_stu_epid_value(fp, (void *)stu + sizeof(Stu_Basic));
         break;
-        
+
     default:
         break;
     }
@@ -180,7 +180,7 @@ int save_stu_value(FILE *fp, void *stu)
     return 1;
 }
 
-int search_info(void **stu_map, int length, void *stu, Search_Op op)
+int search_info(Stu_Basic **stu_map, int length, Stu_Basic *stu, Search_Op op)
 {
     if (stu_map == NULL || stu == NULL)
     {
@@ -198,39 +198,11 @@ int search_info(void **stu_map, int length, void *stu, Search_Op op)
         break;
     }
 
-    void *sp;
-    for (int i = 0; i < length; i++)
+    int position = search_info_basic(stu_map, length, stu, op);
+    if (position != -1)
     {
-        sp = *(stu_map + i);
-        if (sp != NULL)
-        {
-            switch (op)
-            {
-            case NUMBER:
-                if (((Stu_Basic *)stu)->num == ((Stu_Basic *)sp)->num)
-                {
-                    memcpy(stu, sp, stu_size);
-                    return i;
-                }
-                break;
-            case NAME:
-                if (strcmp(((Stu_Basic *)stu)->name, ((Stu_Basic *)sp)->name) == 0)
-                {
-                    memcpy(stu, sp, stu_size);
-                    return i;
-                }
-                break;
-            case ID:
-                if (((Stu_Basic *)stu)->id == ((Stu_Basic *)sp)->id)
-                {
-                    memcpy(stu, sp, stu_size);
-                    return i;
-                }
-                break;
-            default:
-                return -1;
-            }
-        }
+        memcpy(stu, *(stu_map + position), stu_size);
     }
-    return -1;
+
+    return position;
 }

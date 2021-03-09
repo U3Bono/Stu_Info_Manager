@@ -14,7 +14,7 @@ void destroy_buf(Buf_Stu *buff)
     {
         return;
     }
-    void *sp;
+    Stu_Basic *sp;
     for (int i = 0; i < buff->length; i++)
     {
         sp = *(buff->stu_map + i);
@@ -30,8 +30,8 @@ int get_buf(Buf_Stu *buff, int length)
     {
         return 0;
     }
-    int new_length = buff->length + length;                 //扩展长度
-    void **new_table = malloc(sizeof(void *) * new_length); //分配内存
+    int new_length = buff->length + length;                           //扩展长度
+    Stu_Basic **new_table = malloc(sizeof(Stu_Basic *) * new_length); //分配映射表内存
     if (new_table == NULL)
     {
         return 0;
@@ -71,9 +71,10 @@ int get_list(Buf_Stu *buff)
     {
         return 0;
     }
-    fread(&buff->length, sizeof(int), 1, fp);              //读入总数
-    buff->stu_map = malloc(sizeof(void *) * buff->length); //分配映射表
-    void *sp;
+    fread(&buff->length, sizeof(int), 1, fp);                   //读入总数
+    buff->stu_map = malloc(sizeof(Stu_Basic *) * buff->length); //分配映射表内存
+
+    Stu_Basic *sp;
     for (int i = 0; i < buff->length; i++)
     {
         sp = malloc(buff->stu_size);      //分配缓存
@@ -102,7 +103,7 @@ int set_list(Buf_Stu *buff)
     }
     int total = 0;
     fwrite(&total, sizeof(int), 1, fp); //初始化总数
-    void *sp;
+    Stu_Basic *sp;
     for (int i = 0; i < buff->length; i++)
     {
         sp = *(buff->stu_map + i);
@@ -153,7 +154,7 @@ int save_list(Buf_Stu *buff, char *fname)
 
     save_stu_title(fp);
 
-    void *sp;
+    Stu_Basic *sp;
     for (int i = 0; i < buff->length; i++)
     {
         sp = *(buff->stu_map + i);
@@ -174,7 +175,7 @@ int clean_buff(Buf_Stu *buff)
         return 0;
     }
 
-    void *sp;
+    Stu_Basic *sp;
     int last = buff->length - 1; //指向最后一个有数据的地方
     for (int i = 0; i < last + 1; i++)
     {
@@ -200,12 +201,12 @@ int clean_buff(Buf_Stu *buff)
 
         if (i > 0) //插入排序
         {
-            if ((((Stu_Basic *)sp)->num < ((Stu_Basic *)*(buff->stu_map + i - 1))->num))
+            if (sp->num < (*(buff->stu_map + i - 1))->num)
             {
                 *(buff->stu_map + i) = *(buff->stu_map + i - 1);
                 for (int j = i - 1; j > 0; j--)
                 {
-                    if (((Stu_Basic *)sp)->num >= ((Stu_Basic *)*(buff->stu_map + j - 1))->num) //大于等于上一个数
+                    if (sp->num >= (*(buff->stu_map + j - 1))->num) //大于等于上一个数
                     {
                         *(buff->stu_map + j) = sp;
                         break;

@@ -67,30 +67,30 @@ void search_stu(Buf_Stu *buff)
 
     print_star(NULL);
     printf("select:");
-    void *stu = malloc(buff->stu_size); //学生信息
-    Search_Op op;                       //查询操作
+    Stu_Basic *stu = malloc(buff->stu_size); //学生信息
+    Search_Op op;                            //查询操作
     scanf("%d", &op);
     switch (op)
     {
     case NUMBER:
         printf("number:");
-        scanf("%d", &((Stu_Basic *)stu)->num);
+        scanf("%d", &stu->num);
         break;
     case NAME:
         printf("name:");
-        scanf("%s", ((Stu_Basic *)stu)->name);
+        scanf("%s", stu->name);
         break;
     case ID:
         printf("id:");
-        scanf("%lld", &((Stu_Basic *)stu)->id);
+        scanf("%lld", &stu->id);
         break;
     default:
         return;
     }
     printf("college(0-11):"); //院校
-    scanf("%d", &((Stu_Basic *)stu)->ctype);
+    scanf("%d", &stu->ctype);
 
-    switch_buff(buff, ((Stu_Basic *)stu)->ctype);
+    switch_buff(buff, stu->ctype);
 
     if (search_info(buff->stu_map, buff->length, stu, op) == -1)
     {
@@ -109,13 +109,13 @@ void add_stu(Buf_Stu *buff)
     {
         return;
     }
-    void *stu = malloc(buff->stu_size); //学生信息
+    Stu_Basic *stu = malloc(buff->stu_size); //学生信息
     input_info(stu);
 
-    switch_buff(buff, (*(Stu_Basic *)stu).ctype);
+    switch_buff(buff, stu->ctype);
 
     int free_buf = -1; //空闲缓存位置
-    void *sp;
+    Stu_Basic *sp;
     for (int i = 0; i < buff->length; i++)
     {
         sp = *(buff->stu_map + i);
@@ -125,7 +125,7 @@ void add_stu(Buf_Stu *buff)
         }
         else
         {
-            if (((Stu_Basic *)sp)->num == ((Stu_Basic *)stu)->num || ((Stu_Basic *)sp)->id == ((Stu_Basic *)stu)->id)
+            if (sp->num == stu->num || sp->id == stu->id)
             {
                 printf("Existed!\n");
                 return;
@@ -153,13 +153,13 @@ void delect_stu(Buf_Stu *buff)
     {
         return;
     }
-    void *stu = malloc(buff->stu_size); //学生信息
-    printf("id:");                      //id
-    scanf("%lld", &((Stu_Basic *)stu)->id);
+    Stu_Basic *stu = malloc(buff->stu_size); //学生信息
+    printf("id:");                           //id
+    scanf("%lld", &stu->id);
     printf("college(0-11):"); //院校
-    scanf("%d", &((Stu_Basic *)stu)->ctype);
+    scanf("%d", &stu->ctype);
 
-    switch_buff(buff, ((Stu_Basic *)stu)->ctype);
+    switch_buff(buff, stu->ctype);
 
     int position = search_info(buff->stu_map, buff->length, stu, ID);
     if (position == -1)
@@ -180,14 +180,14 @@ void modify_stu(Buf_Stu *buff)
     {
         return;
     }
-    void *stu = malloc(buff->stu_size); //学生信息
+    Stu_Basic *stu = malloc(buff->stu_size); //学生信息
     init_stu(stu);
     printf("id:"); //id
-    scanf("%lld", &((Stu_Basic *)stu)->id);
+    scanf("%lld", &stu->id);
     printf("college(0-11):"); //院校
-    scanf("%d", &((Stu_Basic *)stu)->ctype);
+    scanf("%d", &stu->ctype);
 
-    switch_buff(buff, ((Stu_Basic *)stu)->ctype);
+    switch_buff(buff, stu->ctype);
 
     int position = search_info(buff->stu_map, buff->length, stu, ID); //查询记录学生信息
     if (position == -1)
@@ -198,14 +198,13 @@ void modify_stu(Buf_Stu *buff)
     if (modify_info(stu))
     {
         memcpy(*(buff->stu_map + position), stu, buff->stu_size);
-        free(stu);
         printf("Modify success!\n");
     }
     else
     {
-        free(stu);
         printf("Failed!\n");
     }
+    free(stu);
 }
 
 void clear_list(Buf_Stu *buff)
@@ -251,13 +250,13 @@ void print_list(Buf_Stu *buff)
     }
 
     print_star("Information");
-    void *sp;
+    Stu_Basic *sp;
     for (int i = 0; i < buff->length; i++)
     {
         sp = *(buff->stu_map + i);
         if (sp != NULL)
         {
-            print_stu_basic(*(Stu_Basic *)sp);
+            print_stu_basic(*sp);
             print_line(NULL);
         }
     }
@@ -277,7 +276,7 @@ void output_info(Buf_Stu *buff)
     switch_buff(buff, col_type);
 
     char fname[30];
-    printf("File name:");
+    printf("file name:");
     scanf("%s", fname);
     if (save_list(buff, fname))
     {

@@ -5,3 +5,4 @@ v1.10   Add buffer cleaner.
 v1.12   Update buffer cleaner & buffer switcher;Optimize sys_main().
 v1.20   Support multiple information types.
 v1.21   Optimize stu_main().
+v1.22   Virtual Information Manager.

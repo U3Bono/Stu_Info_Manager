@@ -16,7 +16,7 @@ void login_main();
 
 int login(User_Info *login_user); //登陆
 
-void initUser();                 //初始化用户
+void init_user();                 //初始化用户
 void print_user(User_Info user); //打印用户信息
 
 #endif

@@ -72,6 +72,42 @@ int modify_info_basic(Stu_Basic *stu_basic)
     return 1;
 }
 
+int search_info_basic(Stu_Basic **stu_map, int length, Stu_Basic *stu_basic, Search_Op op)
+{
+    Stu_Basic *sp;
+    for (int i = 0; i < length; i++)
+    {
+        sp = *(stu_map + i);
+        if (sp != NULL)
+        {
+            switch (op)
+            {
+            case NUMBER:
+                if (stu_basic->num == sp->num)
+                {
+                    return i;
+                }
+                break;
+            case NAME:
+                if (strcmp(stu_basic->name, sp->name) == 0)
+                {
+                    return i;
+                }
+                break;
+            case ID:
+                if (stu_basic->id == sp->id)
+                {
+                    return i;
+                }
+                break;
+            default:
+                return -1;
+            }
+        }
+    }
+    return -1;
+}
+
 void print_stu_basic(Stu_Basic stu_basic)
 {
     printf("number:%d\n", stu_basic.num);

@@ -1,4 +1,13 @@
-#include "main.h"
+#include "include/tools/printop.h"
+#include "include/login/login_main.h"
+
+void printf_info()
+{
+    system("clear");
+    print_logo();
+    printf("\n");
+    print_pause("Please input any key to enter...");
+}
 
 int main(int argc, const char *argv[])
 {
@@ -8,10 +17,3 @@ int main(int argc, const char *argv[])
     return 0;
 }
 
-void printf_info()
-{
-    system("clear");
-    print_logo();
-    printf("\n");
-    print_pause("Please input any key to enter...");
-}

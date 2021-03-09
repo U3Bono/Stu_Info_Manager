@@ -13,10 +13,10 @@
 
 typedef struct
 {
-    void **stu_map;    //学生信息映射表（*:学生信息地址，**:学生信息）
-    int length;        //映射表长，必须实时同步
-    Col_Type col_type; //学院
-    int stu_size;      //学生信息大小
+    Stu_Basic **stu_map; //学生信息映射表（*:学生信息地址，**:学生信息）
+    int length;          //映射表长，必须实时同步
+    Col_Type col_type;   //学院
+    int stu_size;        //学生信息大小
 } Buf_Stu;
 
 void init_buf(Buf_Stu *buff);                     //初始化缓存

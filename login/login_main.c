@@ -2,7 +2,7 @@
 
 void login_main()
 {
-    initUser();
+    init_user();
     User_Info login_user;
     system("clear");
     print_star("LOGIN");
@@ -68,7 +68,7 @@ int login(User_Info *login_user)
     return 1;
 }
 
-void initUser()
+void init_user()
 {
     strcat(user.username, "");
     strcat(user.password, "");
