@@ -1,11 +1,12 @@
 #include "../include/student/stu_epidemic.h"
 
-int init_stu_epid(Stu_Epid *stu_epid)
+int init_stu_epid(void *stu)
 {
-    if (stu_epid == NULL)
+    if (stu == NULL)
     {
         return 0;
     }
+    Stu_Epid *stu_epid = stu;
     strcat(stu_epid->road, "");
     strcat(stu_epid->contact, "");
     stu_epid->temperature = 0;
@@ -15,12 +16,13 @@ int init_stu_epid(Stu_Epid *stu_epid)
     return 1;
 }
 
-int input_info_epid(Stu_Epid *stu_epid)
+int input_info_epid(void *stu)
 {
-    if (stu_epid == NULL)
+    if (stu == NULL)
     {
         return 0;
     }
+    Stu_Epid *stu_epid = stu;
     print_line("epidemic");
     printf("road(xx-xx-xx):");
     scanf("%s", stu_epid->road);
@@ -37,12 +39,13 @@ int input_info_epid(Stu_Epid *stu_epid)
     return 1;
 }
 
-int modify_info_epid(Stu_Epid *stu_epid)
+int modify_info_epid(void *stu)
 {
-    if (stu_epid == NULL)
+    if (stu == NULL)
     {
         return 0;
     }
+    Stu_Epid *stu_epid = stu;
     char *op_arr[] = {"road", "contact", "temperature", "medical histroy", "has symptoms?", "back date"};
     print_star(" Options ");
     for (int i = 0; i < 6; i++) //打印选项
@@ -79,15 +82,21 @@ int modify_info_epid(Stu_Epid *stu_epid)
     return 1;
 }
 
-void print_stu_epid(Stu_Epid stu_epid)
+int print_stu_epid(void *stu)
 {
-    printf("road:%s\n", stu_epid.road);
-    printf("contact:%s\n", stu_epid.contact);
-    printf("temperature:%.1f\n", stu_epid.temperature);
-    printf("medical histroy:%s\n", stu_epid.medical_h);
+    if (stu == NULL)
+    {
+        return 0;
+    }
+    Stu_Epid *stu_epid = stu;
+    printf("road:%s\n", stu_epid->road);
+    printf("contact:%s\n", stu_epid->contact);
+    printf("temperature:%.1f\n", stu_epid->temperature);
+    printf("medical histroy:%s\n", stu_epid->medical_h);
     printf("has symptoms?");
-    bool_printf(stu_epid.symptoms);
-    printf("back date:%s\n", stu_epid.back_date);
+    bool_printf(stu_epid->symptoms);
+    printf("back date:%s\n", stu_epid->back_date);
+    return 1;
 }
 
 int save_stu_epid_title(FILE *fp)
@@ -105,12 +114,13 @@ int save_stu_epid_title(FILE *fp)
     return 1;
 }
 
-int save_stu_epid_value(FILE *fp, Stu_Epid *stu_epid)
+int save_stu_epid_value(FILE *fp, void *stu)
 {
-    if (fp == NULL || stu_epid == NULL)
+    if (fp == NULL || stu == NULL)
     {
         return 0;
     }
+    Stu_Epid *stu_epid = stu;
     fprintf(fp, "%20s", stu_epid->road);
     fprintf(fp, "%20s", stu_epid->contact);
     fprintf(fp, "%16.1f", stu_epid->temperature);

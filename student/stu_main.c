@@ -9,6 +9,8 @@ void get_itype(char *s)
 {
     switch (info_type)
     {
+    case BASIC:
+        strcat(s, "basic");
     case EPIDEMIC:
         strcat(s, "epidemic");
         break;
@@ -41,16 +43,10 @@ int init_stu(Stu_Basic *stu)
         return 0;
     }
 
-    init_stu_basic(stu);
-
-    switch (info_type)
+    init_p[BASIC](stu);
+    if (info_type != BASIC)
     {
-    case EPIDEMIC:
-        init_stu_epid((void *)stu + sizeof(Stu_Basic));
-        break;
-
-    default:
-        break;
+        init_p[info_type]((void *)stu + sizeof(Stu_Basic));
     }
 
     return 1;
@@ -63,16 +59,10 @@ int input_info(Stu_Basic *stu)
         return 0;
     }
 
-    input_info_basic(stu);
-
-    switch (info_type)
+    input_p[BASIC](stu);
+    if (info_type != BASIC)
     {
-    case EPIDEMIC:
-        input_info_epid((void *)stu + sizeof(Stu_Basic));
-        break;
-
-    default:
-        break;
+        input_p[info_type]((void *)stu + sizeof(Stu_Basic));
     }
 
     return 1;
@@ -100,42 +90,28 @@ int modify_info(Stu_Basic *stu)
 
     if (op == 0)
     {
-        modify_info_basic(stu);
+        modify_p[BASIC](stu);
     }
     else
     {
-        switch (info_type)
-        {
-        case EPIDEMIC:
-            modify_info_epid((void *)stu + sizeof(Stu_Basic));
-            break;
-
-        default:
-            break;
-        }
+        modify_p[info_type]((void *)stu + sizeof(Stu_Basic));
     }
 
     return 1;
 }
 
-void print_stu(Stu_Basic *stu)
+int print_stu(Stu_Basic *stu)
 {
-    print_line("basic");
-
-    print_stu_basic(*(Stu_Basic *)stu);
-
-    switch (info_type)
+    if (stu == NULL)
     {
-    case EPIDEMIC:
-        print_line("epidemic");
-        print_stu_epid(*(Stu_Epid *)((void *)stu + sizeof(Stu_Basic)));
-        break;
-
-    default:
-        break;
+        return 0;
     }
-
-    print_line(NULL);
+    print_p[BASIC](stu);
+    if (info_type != BASIC)
+    {
+        print_p[info_type]((void *)stu + sizeof(Stu_Basic));
+    }
+    return 1;
 }
 
 int save_stu_title(FILE *fp)
@@ -144,16 +120,10 @@ int save_stu_title(FILE *fp)
     {
         return 0;
     }
-    save_stu_basic_title(fp);
-
-    switch (info_type)
+    savet_p[BASIC](fp);
+    if (info_type != BASIC)
     {
-    case EPIDEMIC:
-        save_stu_epid_title(fp);
-        break;
-
-    default:
-        break;
+        savet_p[info_type](fp);
     }
 
     return 1;
@@ -165,16 +135,10 @@ int save_stu_value(FILE *fp, Stu_Basic *stu)
     {
         return 0;
     }
-    save_stu_basic_value(fp, stu);
-
-    switch (info_type)
+    savev_p[BASIC](fp, stu);
+    if (info_type != BASIC)
     {
-    case EPIDEMIC:
-        save_stu_epid_value(fp, (void *)stu + sizeof(Stu_Basic));
-        break;
-
-    default:
-        break;
+        savev_p[info_type](fp, (void *)stu + sizeof(Stu_Basic));
     }
 
     return 1;

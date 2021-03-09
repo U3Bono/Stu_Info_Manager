@@ -46,7 +46,7 @@ void print_pause(char *notice)
     {
         printf("%s\n", notice);
     }
-    flushiobuf();
+    clear_io();
     getchar();
 }
 
@@ -62,7 +62,7 @@ void bool_printf(int bl)
     }
 }
 
-void flushiobuf()
+void clear_io()
 {
     setbuf(stdin, 0);
     setbuf(stdout, 0);

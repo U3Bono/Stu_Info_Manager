@@ -9,11 +9,11 @@
 #include "../tools/printop.h"
 #include "../tools/stringop.h"
 
-int init_stu_epid(Stu_Epid *stu_epid); //初始化
-int input_info_epid(Stu_Epid *stu_epid); //输入
-int modify_info_epid(Stu_Epid *stu_epid); //修改
-void print_stu_epid(Stu_Epid stu_epid); //打印
+int init_stu_epid(void *stu);      //初始化
+int input_info_epid(void *stu);    //输入
+int modify_info_epid(void *stu);   //修改
+int print_stu_epid(void *stu);     //打印
 int save_stu_epid_title(FILE *fp); //格式化保存
-int save_stu_epid_value(FILE *fp, Stu_Epid *stu_epid);
+int save_stu_epid_value(FILE *fp, void *stu);
 
 #endif

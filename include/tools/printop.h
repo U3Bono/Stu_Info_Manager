@@ -16,6 +16,6 @@ void print_line(char *title);
 void print_pause(char *notice);
 void bool_printf(int bl);
 
-void flushiobuf();
+void clear_io();
 
 #endif

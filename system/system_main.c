@@ -98,7 +98,9 @@ void search_stu(Buf_Stu *buff)
     }
     else
     {
+        print_star("information");
         print_stu(stu);
+        print_line(NULL);
     }
     free(stu);
 }
@@ -256,7 +258,7 @@ void print_list(Buf_Stu *buff)
         sp = *(buff->stu_map + i);
         if (sp != NULL)
         {
-            print_stu_basic(*sp);
+            print_stu_basic(sp);
             print_line(NULL);
         }
     }
