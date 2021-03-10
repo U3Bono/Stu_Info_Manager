@@ -31,7 +31,7 @@ int login(User_Info *login_user)
         return 0;
     }
     FILE *fp;
-    char fname[] = "info_user";
+    char fname[] = "data/info_user";
     User_Info read_user;
     if ((fp = fopen(fname, "rb+")) == NULL) //无用户表，创建用户表
     {

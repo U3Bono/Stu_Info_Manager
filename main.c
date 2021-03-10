@@ -11,6 +11,7 @@ void printf_info()
 
 int main(int argc, const char *argv[])
 {
+    system("mkdir data");
     printf_info();
     login_main();
 

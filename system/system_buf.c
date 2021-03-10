@@ -63,10 +63,10 @@ int get_list(Buf_Stu *buff)
         return 0;
     }
     FILE *fp;
-    char fname[40] = "info_";
-    get_college(fname, buff->col_type);
-    strcat(fname, "_");
+    char fname[40] = "data/info_";
     get_itype(fname);
+    strcat(fname, "_");
+    get_college(fname, buff->col_type);
     if ((fp = fopen(fname, "rb")) == NULL)
     {
         return 0;
@@ -93,10 +93,11 @@ int set_list(Buf_Stu *buff)
         return 0;
     }
     FILE *fp;
-    char fname[40] = "info_";
-    get_college(fname, buff->col_type);
-    strcat(fname, "_");
+    char fname[40] = "data/info_";
     get_itype(fname);
+    strcat(fname, "_");
+    get_college(fname, buff->col_type);
+
     if ((fp = fopen(fname, "wb")) == NULL)
     {
         return 0;
